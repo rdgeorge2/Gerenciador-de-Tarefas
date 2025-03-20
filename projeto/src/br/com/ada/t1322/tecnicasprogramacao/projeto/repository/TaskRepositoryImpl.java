@@ -16,7 +16,7 @@ public class TaskRepositoryImpl implements TaskRepository {
     private static Long idCounter = 1L;
 
     private TaskRepositoryImpl() {
-        // Construtor privado para impedir instanciação externa
+
     }
 
     public static TaskRepositoryImpl getInstance() {
