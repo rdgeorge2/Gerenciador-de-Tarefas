@@ -64,14 +64,14 @@ public class TaskRepositoryImpl implements TaskRepository {
     public List<Task> findByStatus(Task.Status status) {
         return tasks.stream()
                 .filter(task -> task.getStatus() == status)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
     public List<Task> findBy(Predicate<Task> predicate) {
         return tasks.stream()
                 .filter(predicate)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -80,7 +80,6 @@ public class TaskRepositoryImpl implements TaskRepository {
                 .filter(task -> task.getId().equals(id))
                 .findFirst();
     }
-
 
     @Override
     public boolean deleteById(Long id) {
