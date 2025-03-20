@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
+
 
 public class TaskRepositoryImpl implements TaskRepository {
 
@@ -57,7 +57,7 @@ public class TaskRepositoryImpl implements TaskRepository {
     public List<Task> findByStatus(String status) {
         return tasks.stream()
                 .filter(task -> task.getStatus().toString().equalsIgnoreCase(status))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
