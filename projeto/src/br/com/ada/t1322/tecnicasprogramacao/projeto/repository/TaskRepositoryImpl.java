@@ -5,7 +5,9 @@ import br.com.ada.t1322.tecnicasprogramacao.projeto.model.Task;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class TaskRepositoryImpl implements TaskRepository {
 
@@ -52,35 +54,27 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public List<Task> findAll() {
-        return new ArrayList<>(tasks);
+        return  new  ArrayList<>(tasks);
     }
 
     @Override
     public List<Task> findByStatus(String status) {
-        return tasks.stream()
-                .filter(task -> task.getStatus().getDescricao().equalsIgnoreCase(status))
-                .toList();
+        return tasks.stream().filter(task -> task.getStatus().equals(status)).collect(Collectors.toList());
     }
 
     @Override
     public List<Task> findByStatus(Task.Status status) {
-        return tasks.stream()
-                .filter(task -> task.getStatus() == status)
-                .toList();
+        return tasks.stream().filter(task -> task.getStatus().equals(status)).collect(Collectors.toList());
     }
 
     @Override
     public List<Task> findBy(Predicate<Task> predicate) {
-        return tasks.stream()
-                .filter(predicate)
-                .toList();
+        return  tasks.stream().filter(predicate).collect(Collectors.toList());
     }
 
     @Override
     public Optional<Task> findById(Long id) {
-        return tasks.stream()
-                .filter(task -> task.getId().equals(id))
-                .findFirst();
+        return tasks.stream().filter(task -> task.getId().equals(id)).findFirst();
     }
 
     @Override
