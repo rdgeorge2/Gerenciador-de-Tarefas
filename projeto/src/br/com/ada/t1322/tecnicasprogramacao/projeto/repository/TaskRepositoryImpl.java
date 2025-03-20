@@ -54,11 +54,12 @@ public class TaskRepositoryImpl implements TaskRepository {
         return new ArrayList<>(tasks);
     }
 
+   
     @Override
     public List<Task> findByStatus(String status) {
         return tasks.stream()
-                .filter(task -> task.getStatus().getDescricao().equalsIgnoreCase(status))
-                .toList();
+                .filter(task -> task.getStatus().toString().equalsIgnoreCase(status))
+                .collect(Collectors.toList());
     }
 
     @Override
