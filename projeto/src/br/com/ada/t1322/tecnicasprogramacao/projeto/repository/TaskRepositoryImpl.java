@@ -7,16 +7,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-
 public class TaskRepositoryImpl implements TaskRepository {
 
     private static final TaskRepositoryImpl INSTANCE = new TaskRepositoryImpl();
-
-    private final List<Task> tasks = new ArrayList<>();
+       private final List<Task> tasks = new ArrayList<>();
 
     private static Long idCounter = 1L;
 
     private TaskRepositoryImpl() {
+
     }
 
     public static TaskRepositoryImpl getInstance() {
@@ -26,9 +25,11 @@ public class TaskRepositoryImpl implements TaskRepository {
     @Override
     public Task save(Task task) {
         if (task.getId() == null) {
+
             task.setId(getIncrementalId());
             tasks.add(task);
         } else {
+
             Optional<Task> existingTask = findById(task.getId());
 
             if (existingTask.isPresent()) {
@@ -53,11 +54,12 @@ public class TaskRepositoryImpl implements TaskRepository {
         return new ArrayList<>(tasks);
     }
 
+   
     @Override
     public List<Task> findByStatus(String status) {
         return tasks.stream()
                 .filter(task -> task.getStatus().toString().equalsIgnoreCase(status))
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override
