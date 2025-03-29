@@ -6,11 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class TaskRepositoryImpl implements TaskRepository {
 
     private static final TaskRepositoryImpl INSTANCE = new TaskRepositoryImpl();
-       private final List<Task> tasks = new ArrayList<>();
+    private final List<Task> tasks = new ArrayList<>();
 
     private static Long idCounter = 1L;
 
@@ -54,7 +55,7 @@ public class TaskRepositoryImpl implements TaskRepository {
         return new ArrayList<>(tasks);
     }
 
-   
+
     @Override
     public List<Task> findByStatus(String status) {
         return tasks.stream()
