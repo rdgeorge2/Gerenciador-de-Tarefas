@@ -1,58 +1,52 @@
-package br.com.ada.t1322.tecnicasprogramacao.projeto.repository;
+package br.com.ada.t1322.tecnicasprogramacao.projeto.controller;
 
 import br.com.ada.t1322.tecnicasprogramacao.projeto.model.Task;
+import br.com.ada.t1322.tecnicasprogramacao.projeto.service.TaskService;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Optional;
-import java.util.function.Predicate;
 
-public class TaskRepositoryImpl implements TaskRepository {
+public class TaskControllerImpl extends AbstractTaskController {
 
-    private static final TaskRepositoryImpl INSTANCE = new TaskRepositoryImpl();
-       private final List<Task> tasks = new ArrayList<>();
+    private static final int MIN_TITLE_LENGTH = 3;
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    private static Long idCounter = 1L;
-
-    private TaskRepositoryImpl() {
-
-    }
-
-    public static TaskRepositoryImpl getInstance() {
-        return INSTANCE;
+    public TaskControllerImpl(TaskService taskService) {
+        super(taskService);
     }
 
     @Override
-    public Task save(Task task) {
-        if (task.getId() == null) {
-
-            task.setId(getIncrementalId());
-            tasks.add(task);
-        } else {
-
-            Optional<Task> existingTask = findById(task.getId());
-
-            if (existingTask.isPresent()) {
-                Task currentTask = existingTask.get();
-                currentTask.setTitle(task.getTitle());
-                currentTask.setDescription(task.getDescription());
-                currentTask.setDeadline(task.getDeadline());
-                currentTask.setStatus(task.getStatus());
-            } else {
-                throw new IllegalArgumentException("Tentativa de salvar uma nova tarefa com um ID inexistente.");
-            }
-        }
-        return task;
-    }
-
-    private static Long getIncrementalId() {
-        return idCounter++;
+    protected void validateTitle(String title) {
+        Optional.ofNullable(title)
+                .filter(t -> !t.isBlank() && t.length() >= MIN_TITLE_LENGTH)
+                .orElseThrow(() -> new IllegalArgumentException("O título deve ter pelo menos " + MIN_TITLE_LENGTH + " caracteres e não pode ser vazio."));
     }
 
     @Override
-    public List<Task> findAll() {
-        return new ArrayList<>(tasks);
+    protected void validateDeadline(String deadline) {
+        Optional.ofNullable(deadline)
+                .map(date -> {
+                    try {
+                        return LocalDate.parse(date, DATE_FORMATTER);
+                    } catch (DateTimeParseException e) {
+                        throw new IllegalArgumentException("Formato de data inválido. Use 'dd/MM/yyyy'.");
+                    }
+                })
+                .filter(parsedDate -> !parsedDate.isBefore(LocalDate.now()))
+                .orElseThrow(() -> new IllegalArgumentException("A data deve ser igual ou posterior à data atual."));
     }
+
+    @Override
+    protected void validateStatus(Task.Status status) {
+        Optional.ofNullable(status)
+                .orElseThrow(() -> new IllegalArgumentException("O status não pode ser nulo."));
+    }
+
+}
+
+
 
    
     @Override
