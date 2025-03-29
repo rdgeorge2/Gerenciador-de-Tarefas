@@ -1,12 +1,14 @@
-package br.com.ada.t1322.tecnicasprogramacao.projeto.repository;
+package br.com.ada.t1322.tecnicasprogramacao.projeto.controller;
 
 import br.com.ada.t1322.tecnicasprogramacao.projeto.model.Task;
+import br.com.ada.t1322.tecnicasprogramacao.projeto.service.TaskService;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Optional;
-import java.util.function.Predicate;
 
+<<<<<<< HEAD
 
 public class TaskRepositoryImpl implements TaskRepository {
 
@@ -51,13 +53,58 @@ public class TaskRepositoryImpl implements TaskRepository {
     @Override
     public List<Task> findAll() {
         return new ArrayList<>(tasks);
+=======
+public class TaskControllerImpl extends AbstractTaskController {
+
+    private static final int MIN_TITLE_LENGTH = 3;
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+    public TaskControllerImpl(TaskService taskService) {
+        super(taskService);
     }
 
+    @Override
+    protected void validateTitle(String title) {
+        Optional.ofNullable(title)
+                .filter(t -> !t.isBlank() && t.length() >= MIN_TITLE_LENGTH)
+                .orElseThrow(() -> new IllegalArgumentException("O título deve ter pelo menos " + MIN_TITLE_LENGTH + " caracteres e não pode ser vazio."));
+    }
+
+    @Override
+    protected void validateDeadline(String deadline) {
+        Optional.ofNullable(deadline)
+                .map(date -> {
+                    try {
+                        return LocalDate.parse(date, DATE_FORMATTER);
+                    } catch (DateTimeParseException e) {
+                        throw new IllegalArgumentException("Formato de data inválido. Use 'dd/MM/yyyy'.");
+                    }
+                })
+                .filter(parsedDate -> !parsedDate.isBefore(LocalDate.now()))
+                .orElseThrow(() -> new IllegalArgumentException("A data deve ser igual ou posterior à data atual."));
+>>>>>>> f3525459d822383b16ec0a54a65d9a39cf63f98d
+    }
+
+    @Override
+    protected void validateStatus(Task.Status status) {
+        Optional.ofNullable(status)
+                .orElseThrow(() -> new IllegalArgumentException("O status não pode ser nulo."));
+    }
+
+}
+
+
+
+   
     @Override
     public List<Task> findByStatus(String status) {
         return tasks.stream()
                 .filter(task -> task.getStatus().toString().equalsIgnoreCase(status))
+<<<<<<< HEAD
                 .toList();
+=======
+                .collect(Collectors.toList());
+>>>>>>> f3525459d822383b16ec0a54a65d9a39cf63f98d
     }
 
     @Override
