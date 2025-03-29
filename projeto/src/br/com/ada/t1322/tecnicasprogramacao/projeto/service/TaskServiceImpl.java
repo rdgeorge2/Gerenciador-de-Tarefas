@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class TaskServiceImpl extends AbstractTaskService {
 
@@ -33,27 +34,30 @@ public class TaskServiceImpl extends AbstractTaskService {
     @Override
     public List<Task> findAll(Optional<Comparator<Task>> orderBy) {
         List<Task> tasks = taskRepository.findAll();
-
-        orderBy.ifPresent(comparator -> tasks.sort(comparator));
-
-        return tasks;
+        return orderBy.map(comparator ->
+                tasks.stream()
+                        .sorted(comparator.thenComparing(Task::getId)) // Critério secundário para desempate
+                        .collect(Collectors.toList())
+        ).orElse(tasks);
     }
 
     @Override
     public List<Task> findByStatus(Task.Status status, Optional<Comparator<Task>> orderBy) {
         List<Task> tasks = taskRepository.findByStatus(status);
-
-        orderBy.ifPresent(comparator -> tasks.sort(comparator));
-
-        return tasks;
+        return orderBy.map(comparator ->
+                tasks.stream()
+                        .sorted(comparator.thenComparing(Task::getId)) // Critério secundário para desempate
+                        .collect(Collectors.toList())
+        ).orElse(tasks);
     }
 
     @Override
     public List<Task> findBy(Predicate<Task> predicate, Optional<Comparator<Task>> orderBy) {
         List<Task> tasks = taskRepository.findBy(predicate);
-
-        orderBy.ifPresent(comparator -> tasks.sort(comparator));
-
-        return tasks;
+        return orderBy.map(comparator ->
+                tasks.stream()
+                        .sorted(comparator.thenComparing(Task::getId)) // Critério secundário para desempate
+                        .collect(Collectors.toList())
+        ).orElse(tasks);
     }
 }
