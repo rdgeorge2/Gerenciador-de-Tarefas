@@ -36,7 +36,7 @@ public class TaskServiceImpl extends AbstractTaskService {
         List<Task> tasks = taskRepository.findAll();
         return orderBy.map(comparator ->
                 tasks.stream()
-                        .sorted(comparator.thenComparing(Task::getId)) // Critério secundário para desempate
+                        .sorted(comparator.thenComparing(Task::getId)) 
                         .collect(Collectors.toList())
         ).orElse(tasks);
     }
@@ -46,7 +46,7 @@ public class TaskServiceImpl extends AbstractTaskService {
         List<Task> tasks = taskRepository.findByStatus(status);
         return orderBy.map(comparator ->
                 tasks.stream()
-                        .sorted(comparator.thenComparing(Task::getId)) // Critério secundário para desempate
+                        .sorted(comparator.thenComparing(Task::getId)) 
                         .collect(Collectors.toList())
         ).orElse(tasks);
     }
@@ -56,7 +56,7 @@ public class TaskServiceImpl extends AbstractTaskService {
         List<Task> tasks = taskRepository.findBy(predicate);
         return orderBy.map(comparator ->
                 tasks.stream()
-                        .sorted(comparator.thenComparing(Task::getId)) // Critério secundário para desempate
+                        .sorted(comparator.thenComparing(Task::getId)) 
                         .collect(Collectors.toList())
         ).orElse(tasks);
     }
