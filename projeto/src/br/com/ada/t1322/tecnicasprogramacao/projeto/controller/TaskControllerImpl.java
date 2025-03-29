@@ -43,6 +43,5 @@ public class TaskControllerImpl extends AbstractTaskController {
         Optional.ofNullable(status)
                 .orElseThrow(() -> new IllegalArgumentException("O status não pode ser nulo."));
     }
-
 }
 
