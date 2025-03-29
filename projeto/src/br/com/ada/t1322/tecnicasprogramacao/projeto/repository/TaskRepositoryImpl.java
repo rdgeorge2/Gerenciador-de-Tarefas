@@ -8,8 +8,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
-<<<<<<< HEAD
-
 public class TaskRepositoryImpl implements TaskRepository {
 
     private static final TaskRepositoryImpl INSTANCE = new TaskRepositoryImpl();
@@ -82,7 +80,7 @@ public class TaskControllerImpl extends AbstractTaskController {
                 })
                 .filter(parsedDate -> !parsedDate.isBefore(LocalDate.now()))
                 .orElseThrow(() -> new IllegalArgumentException("A data deve ser igual ou posterior à data atual."));
->>>>>>> f3525459d822383b16ec0a54a65d9a39cf63f98d
+
     }
 
     @Override
@@ -100,11 +98,11 @@ public class TaskControllerImpl extends AbstractTaskController {
     public List<Task> findByStatus(String status) {
         return tasks.stream()
                 .filter(task -> task.getStatus().toString().equalsIgnoreCase(status))
-<<<<<<< HEAD
+
                 .toList();
-=======
+
                 .collect(Collectors.toList());
->>>>>>> f3525459d822383b16ec0a54a65d9a39cf63f98d
+
     }
 
     @Override
